@@ -28,5 +28,14 @@ let rec merge_sort lst =
   merge (merge_sort (List.nth split 0)) (merge_sort (List.nth split 1)) 
 
 
+(* Comments on the difficulty of sorting with merge sort in ocaml: Splitting the list was something
+that was very difficult for me to conceptualize in ocaml as I have to write my own recursive function to do that
+I couldn't just keep track of where the middle of the list was and then sort it in place. I had to create a recursive
+function that would iterate to the middle, and it had to return a pair of lists on every iteration.
 
+I also had to get the idea of loops out of my head in order to write it in an Ocaml like fashion. 
+Writing every loop by using a recursive function forced me into a different mode of thinking. I expected
+that merge sort would be easier/more elegant with ocaml due to the functional/recursive nature of the language.
+However, I think that it may be more elegant to write in languages that use loops more liberally.
+*)
      
