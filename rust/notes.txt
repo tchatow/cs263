@@ -1,0 +1,18 @@
+bubblesort
+* This one was implemented in-place. This lead to some interesting observations
+* In rust, a variable is immutable by default. To allow us to modify it inside the swap function, we must add 'mut'
+  in multiple places: The declaration, when we take the reference to call the function, and in the function signature.
+
+mergesort
+* Some parts of rust are very similar to C++ - templates are instantiated in much the same way
+* Rust allows a lot more to be implied, like OCaml. In both languages types can be omitted as long as the compiler
+  knows they are correct within the context of the program.
+* Rust follows an imperitive programming style, but is functional in some aspects. For instance, slicing
+  is a built in feature similar to OCaml. Instead of writing "return" at the end of a function, the value of
+  the last statement is the return value (like OCaml).
+* Both languages feature much more strong checking than C++. They know ahead of time whether the code you are writing
+  could violate array accesses. Rust disallows multiple slices of an array to exist simultaneously. 
+  
+fibonacci
+* I used this one to practice Rust's matching feature. This lends itself to a very similar program as written in OCaml.
+* We can exhaustively check that every case is handled which is useful for verifying the program.
