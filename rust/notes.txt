@@ -16,3 +16,12 @@ mergesort
 fibonacci
 * I used this one to practice Rust's matching feature. This lends itself to a very similar program as written in OCaml.
 * We can exhaustively check that every case is handled which is useful for verifying the program.
+
+
+dijkstra
+* A lot of methods return an Optional. These need to be unwrap() ed before they can be used. An alternative syntax exists,
+ with a question mark at the end of a statement, which either unwraps or returns an empty optional from the function.
+* Need a lot of explicit casting - ie. u32 can't be used in place of usize
+* Why does f32.cmp take the second argument by reference?
+* In the lambda in iter.min_by(), we need to dereference the value twice. Why is this not just once?
+
