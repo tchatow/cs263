@@ -1,3 +1,7 @@
+use rand::Rng;
+use std::time::Instant;
+use rand::prelude::*;
+
 fn bubble_sort(arr: &mut [i32]) {
     let n = arr.len();
     if n <= 1 {
@@ -61,12 +65,27 @@ fn merge(left: Vec<i32>, right: Vec<i32>) -> Vec<i32> {
     merged
 }
 
-fn main() {
-    
-    let mut arr = [5,2,7,8,1,2];
-    bubble_sort(&mut arr);
-    println!("{:?}", arr);
+fn generate_random_array(size: usize) -> Vec<i32> {
+    let mut rng = rand::rng();
+    let mut arr = Vec::with_capacity(size);
 
-    let arr2 = vec![5,2,7,8,1,2];
-    println!("{:?}", merge_sort(arr2));
+    for _ in 0..size {
+        arr.push(rng.gen_range(0..(size as i32)));
+    }
+
+    arr
+}
+
+fn main() {
+    for i in 0..24 {
+    let t1 = Instant::now();
+    let arr = generate_random_array(2usize.pow(i));
+    let arr_len = arr.len();
+    let mut arr1 = arr.clone();
+    bubble_sort(&mut arr1);
+    let t2 = Instant::now();
+    merge_sort(arr);
+    let t3 = Instant::now();
+    println!("{}\t{}\t{}", arr_len, (t2 - t1).as_micros(), (t3 - t2).as_micros());
+    }
 }

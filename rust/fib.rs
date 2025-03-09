@@ -1,3 +1,5 @@
+use  std::time::Instant;
+
 fn fibonacci_recursive(n: u64) -> u64 {
     match n {
         0 => 0,
@@ -7,5 +9,10 @@ fn fibonacci_recursive(n: u64) -> u64 {
 }
 
 fn main() {
-    println!("{:?}", fibonacci_recursive(5));
+    for _i in 0..10 {
+        let start = Instant::now();
+        fibonacci_recursive(40);
+        let end = Instant::now();
+        println!("{}", (end - start).as_micros());
+    }
 }

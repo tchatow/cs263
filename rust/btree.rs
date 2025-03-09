@@ -30,10 +30,13 @@ fn main() {
     let start = Instant::now();
     
     for depth in 0..=21 {
+        let runs = Instant::now();
         let tree = init_tree(depth); 
         let count = node_count(&tree);
+	let ends = Instant::now();
 
-        println!("Depth {}: Nodes = {}", depth, count);
+    //    println!("Depth {}: Nodes = {}, Runtime = {:?}", depth, count, (ends - runs));
+        println!("{}\t{}\t{}", depth, count, (ends - runs).as_micros());
     }
     
     let end = Instant::now();

@@ -11,3 +11,7 @@ rand = "0.9.0"
 [[bin]]
 name = "dijkstra"
 path = "dijkstra.rs"
+
+[[bin]]
+name = "sorting"
+path = "sorting.rs"
