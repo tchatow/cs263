@@ -19,7 +19,11 @@ let rec node_count = function
 let benchmark = 
   let t1 = Time_ns.now() in
     for i = 0 to 21 do
-      ignore((node_count (init_tree i)))
+      print_int (node_count (init_tree i));
+      print_endline "";
     done;
     let t2 = Time_ns.now() in
-    print_int (Time_ns.to_int_ns_since_epoch t2 - Time_ns.to_int_ns_since_epoch t1);
+    print_int (Time_ns.to_int_ns_since_epoch t2 - Time_ns.to_int_ns_since_epoch t1);;
+
+
+let () = benchmark 
