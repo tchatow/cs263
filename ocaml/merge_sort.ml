@@ -1,4 +1,11 @@
+(* open Core *)
 
+let generate_random_list n =
+  let rec random_list_aux lst n =
+    if n <= 0 then lst
+    else random_list_aux (Random.int n :: lst) (n - 1)
+  in
+  random_list_aux [] n;;
 
 
 let rec split_list_internal lst num acc =
@@ -27,6 +34,22 @@ let rec merge_sort lst =
   | _ :: _ -> let split = split_list lst ((List.length lst)/2) in
   merge (merge_sort (List.nth split 0)) (merge_sort (List.nth split 1)) 
 
+
+
+let benchmark n =
+  for i = 0 to n do
+    let lst = generate_random_list (BatInt.pow 2 i) in
+    let t1 = Core.Time_ns.now() in
+    ignore(merge_sort lst);
+    let t2 = Core.Time_ns.now() in
+    print_string "2^";
+    print_int i;
+    print_endline "";
+    print_int (Core.Time_ns.to_int_ns_since_epoch t2 - Core.Time_ns.to_int_ns_since_epoch t1);
+    print_endline "";
+  done
+
+let () = benchmark 24
 
 (* Comments on the difficulty of sorting with merge sort in ocaml: Splitting the list was something
 that was very difficult for me to conceptualize in ocaml as I have to write my own recursive function to do that
