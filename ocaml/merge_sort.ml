@@ -39,7 +39,7 @@ let rec merge_sort_aux lst len =
 let merge_sort lst =
   merge_sort_aux lst (List.length lst)
 
-let benchmark n =
+(* let benchmark n =
   for i = 0 to n do
     let lst = generate_random_list (BatInt.pow 2 i) in
     let t1 = Core.Time_ns.now() in
@@ -51,8 +51,41 @@ let benchmark n =
     print_endline "";
   done
 
-let () = benchmark 24
+let () = benchmark 24 *)
 
+
+
+
+let rec benchmark k i = 
+  if k <=0 then [] 
+  else
+
+    let lst = generate_random_list (BatInt.pow 2 i) in
+    let t1 = Core.Time_ns.now() in
+    ignore(merge_sort lst);
+    let t2 = Core.Time_ns.now() in
+    (* Stdlib.print_int (Time_ns.to_int_ns_since_epoch t2 - Time_ns.to_int_ns_since_epoch t1); *)
+    (Core.Time_ns.to_int_ns_since_epoch t2 - Core.Time_ns.to_int_ns_since_epoch t1)::(benchmark (k-1) i)
+
+
+let stats data =
+    let n = Int.to_float (List.length data) in 
+    let avg = ((Int.to_float (BatList.sum data)) /. n) in
+    let stddev = ((Core.List.fold_right data ~f:(fun num acc -> acc +. BatFloat.pow ((Int.to_float num)-.avg) 2.) ~init:0.) /. n) |> Float.sqrt in
+    (avg, stddev)
+
+
+
+let rec main i = 
+  if i > 24 then () else
+  let (avg, stddev) = stats (benchmark 10 i) in
+  Stdlib.print_float avg;
+  Stdlib.print_string "\t";
+  Stdlib.print_float stddev;
+  Stdlib.print_newline ();
+  main (i +1)
+
+let () = main 0;
 (* Comments on the difficulty of sorting with merge sort in ocaml: Splitting the list was something
 that was very difficult for me to conceptualize in ocaml as I have to write my own recursive function to do that
 I couldn't just keep track of where the middle of the list was and then sort it in place. I had to create a recursive

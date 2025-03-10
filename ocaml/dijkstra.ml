@@ -34,8 +34,8 @@ let add_edge (graph: nodel IntMap.t) (record: string list) =
 
 (* Only fold on 10000 elements*)
 
-let first10000 = take_first_n (List.tl csvfile) 10000
-let graph = List.fold_left add_edge empty_graph first10000
+let firstn n = take_first_n (List.tl csvfile) n
+let make_graph n = List.fold_left add_edge empty_graph (firstn n)
 
 
 let find_min_from_set unvisited distance =
@@ -87,16 +87,52 @@ let dijkstra (graph : nodel IntMap.t) start_n end_n  =
     List.fold_left (fun map (node_name, _) -> IntMap.add node_name infinity map) IntMap.empty) 
     |> IntMap.add start_n 0.  in
   
-  let (_, path_map) =  dijkstra_inner graph start_n end_n unvisited distance IntMap.empty in
-  print_path path_map start_n end_n
+  ignore(dijkstra_inner graph start_n end_n unvisited distance IntMap.empty)
+  (* print_path path_map start_n end_n *)
 
   
 
 
-let () = dijkstra graph 1 4
+(* let () = dijkstra graph 1 4 *)
   
   
-  
+
+let rec benchmark k i = 
+  if k <=0 then [] 
+  else
+    let num_nodes = (BatInt.pow 2 i) in
+    let graph = make_graph num_nodes in
+    let t1 = Core.Time_ns.now() in
+
+    for i = 0 to 999 do
+      let end_n = Random.int num_nodes +1 in
+      let start_n = Random.int num_nodes +1 in 
+      ignore(try dijkstra graph start_n end_n with Not_found -> ());
+    done;
+
+    let t2 = Core.Time_ns.now() in
+    (* Stdlib.print_int (Time_ns.to_int_ns_since_epoch t2 - Time_ns.to_int_ns_since_epoch t1); *)
+    (Core.Time_ns.to_int_ns_since_epoch t2 - Core.Time_ns.to_int_ns_since_epoch t1)::(benchmark (k-1) i)
+
+
+let stats data =
+    let n = Int.to_float (List.length data) in 
+    let avg = ((Int.to_float (BatList.sum data)) /. n) in
+    let stddev = ((Core.List.fold_right data ~f:(fun num acc -> acc +. BatFloat.pow ((Int.to_float num)-.avg) 2.) ~init:0.) /. n) |> Float.sqrt in
+    (avg, stddev)
+
+
+
+let rec main i = 
+  if i > 24 then () else
+  let (avg, stddev) = stats (benchmark 10 i) in
+  Stdlib.print_float avg;
+  Stdlib.print_string "\t";
+  Stdlib.print_float stddev;
+  Stdlib.print_newline ();
+  main (i +1)
+
+let () = main 0;
 
 
 
