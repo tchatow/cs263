@@ -1,6 +1,6 @@
+use rand::prelude::*;
 use rand::Rng;
 use std::time::Instant;
-use rand::prelude::*;
 
 fn bubble_sort(arr: &mut [i32]) {
     let n = arr.len();
@@ -76,16 +76,46 @@ fn generate_random_array(size: usize) -> Vec<i32> {
     arr
 }
 
+fn stats(data: &[f32]) -> (f32, f32) {
+    let n = data.len() as f32;
+    let avg: f32 = data.iter().sum::<f32>() / n;
+    let stddev = (data.iter().map(|x| (*x - avg).powf(2.0)).sum::<f32>() / n).sqrt();
+    (avg, stddev)
+}
+
 fn main() {
-    for i in 0..24 {
-    let t1 = Instant::now();
-    let arr = generate_random_array(2usize.pow(i));
-    let arr_len = arr.len();
-    let mut arr1 = arr.clone();
-    bubble_sort(&mut arr1);
-    let t2 = Instant::now();
-    merge_sort(arr);
-    let t3 = Instant::now();
-    println!("{}\t{}\t{}", arr_len, (t2 - t1).as_micros(), (t3 - t2).as_micros());
+    const K: usize = 10;
+    let mut bubble_times = [[0.0; K]; 24];
+    let mut merge_times = [[0.0; K]; 24];
+
+    for n in 0..10 {
+        for i in 0..17 {
+            let t1 = Instant::now();
+            let arr = generate_random_array(2usize.pow(i));
+            let arr_len = arr.len();
+            let mut arr1 = arr.clone();
+            bubble_sort(&mut arr1);
+            let t2 = Instant::now();
+            merge_sort(arr);
+            let t3 = Instant::now();
+
+            bubble_times[i as usize][n] = (t2 - t1).as_micros() as f32;
+            merge_times[i as usize][n] = (t3 - t2).as_micros() as f32;
+
+            /*println!(
+                "{}\t{}\t{}",
+                arr_len,
+                (t2 - t1).as_micros(),
+                (t3 - t2).as_micros()
+            );*/
+        }
+        println!("n={}", n);
+    }
+
+    println!("Results");
+    for i in 0..=24 {
+        let (a0, s0) = stats(&bubble_times[i]);
+        let (a1, s1) = stats(&merge_times[i]);
+        println!("{}\t{}\t{}\t{}", a0, s0, a1, s1);
     }
 }
