@@ -1,5 +1,4 @@
-(* open Core *)
-
+(*used chatgpt to create the generate_random_list function*)
  let generate_random_list n =
   let rec random_list_aux lst n =
     if n <= 0 then lst
